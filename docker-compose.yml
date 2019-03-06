@@ -15,7 +15,7 @@ services:
     php:
         container_name: ${APP_NAME:?err}_php
         build: docker/php
-        user: "1000:1000"
+        user: "${UID:?err}:${GID:?err}"
         volumes:
             - ./app:/var/www/app
     mysql:
