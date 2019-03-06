@@ -1,4 +1,5 @@
 FROM debian:stretch-slim
+ENV PV 7.2 
 
 RUN apt-get update
 RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https
@@ -9,9 +10,9 @@ RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/source
 RUN apt-get update
 
 # Install php
-RUN apt-get install -y php7.2-cli php7.2-fpm php7.2-common \
-    php7.2-curl php7.2-fpm php7.2-gd php7.2-json php7.2-mbstring \
-    php7.2-mysql php7.2-opcache php7.2-readline php7.2-soap php7.2-xml php7.2-zip \
+RUN apt-get install -y php${PV}-cli php${PV}-fpm php${PV}-common \
+    php${PV}-curl php${PV}-fpm php${PV}-gd php${PV}-json php${PV}-mbstring \
+    php${PV}-mysql php${PV}-opcache php${PV}-readline php${PV}-soap php${PV}-xml php${PV}-zip \
     php-apcu php-redis php-xdebug
 
 RUN mkdir -p /run/php && chmod 777 /run/php
@@ -27,18 +28,27 @@ RUN set -eux; \
 	chown dev:dev /var/www/app; \
 	chmod 777 /var/www/app
 
+RUN sed -i '1 a xdebug.remote_enable = 1' /etc/php/${PV}/mods-available/xdebug.ini
+RUN sed -i '1 a xdebug.remote_connect_back = 0' /etc/php/${PV}/mods-available/xdebug.ini
+RUN sed -i '1 a xdebug.remote_port = 9000' /etc/php/${PV}/mods-available/xdebug.ini
+RUN sed -i '1 a xdebug.remote_handler = dbgp' /etc/php/${PV}/mods-available/xdebug.ini
+RUN sed -i '1 a xdebug.remote_mode = req' /etc/php/${PV}/mods-available/xdebug.ini
+RUN sed -i '1 a xdebug.remote_autostart = 1' /etc/php/${PV}/mods-available/xdebug.ini
+RUN sed -i '1 a xdebug.idekey = PHPSTORM' /etc/php/${PV}/mods-available/xdebug.ini
+
 # Get composer
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
 RUN mv composer.phar /usr/local/bin/composer
 
 COPY docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
+RUN ln -s /usr/sbin/php-fpm${PV} /usr/sbin/php-fpm
 
 ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /var/www/app
 
 RUN set -ex \
-	&& cd /etc/php/7.2/fpm/pool.d/ \
+	&& cd /etc/php/${PV}/fpm/pool.d/ \
 	&& { \
 		echo '[global]'; \
 		echo 'error_log = /proc/self/fd/2'; \
@@ -61,4 +71,4 @@ RUN set -ex \
 	} | tee zz-docker.conf
 
 EXPOSE 9000
-CMD ["php-fpm7.2"]
+CMD ["php-fpm"]
