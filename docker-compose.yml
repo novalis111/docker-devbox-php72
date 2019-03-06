@@ -18,6 +18,7 @@ services:
         user: "${UID:?err}:${GID:?err}"
         volumes:
             - ./app:/var/www/app
+            - ./share:/tmp/share
     mysql:
         container_name: ${APP_NAME:?err}_mysql
         image: mysql:latest
@@ -28,6 +29,7 @@ services:
             MYSQL_PASSWORD: dev
         volumes:
             - mysql:/var/lib/mysql
+            - ./share:/tmp/share
 
 volumes:
     mysql:
