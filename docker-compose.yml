@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+    nginx:
+        container_name: ${APP_NAME:?err}_nginx
+        image: nginx:latest
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./app:/var/www/app
+            - ./nginx.conf:/etc/nginx/conf.d/my.conf
+        links:
+            - php
+    php:
+        container_name: ${APP_NAME:?err}_php
+        build: docker/php
+        user: "1000:1000"
+        volumes:
+            - ./app:/var/www/app
+    mysql:
+        container_name: ${APP_NAME:?err}_mysql
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: dev
+            MYSQL_DATABASE: ${APP_NAME:?err}_dev
+            MYSQL_USER: dev
+            MYSQL_PASSWORD: dev
+        volumes:
+            - mysql:/var/lib/mysql
+
+volumes:
+    mysql:
