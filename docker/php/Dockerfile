@@ -9,7 +9,11 @@ RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/source
 RUN apt-get update
 
 # Install php
-RUN apt-get install -y php7.2-cli php7.2-fpm
+RUN apt-get install -y php7.2-cli php7.2-fpm php7.2-common \
+    php7.2-curl php7.2-fpm php7.2-gd php7.2-json php7.2-mbstring \
+    php7.2-mysql php7.2-opcache php7.2-readline php7.2-soap php7.2-xml php7.2-zip \
+    php-apcu php-redis php-xdebug
+
 RUN mkdir -p /run/php && chmod 777 /run/php
 
 # Add user "dev" with password "dev"
