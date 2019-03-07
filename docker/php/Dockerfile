@@ -31,6 +31,14 @@ RUN set -eux; \
 # xdebug config
 COPY xdebug.ini /etc/php/${PV}/mods-available/
 
+# PHP config
+RUN sed -e 's/max_execution_time = 30/max_execution_time = 3000/' -i /etc/php/${PV}/fpm/php.ini
+RUN sed -e 's/max_input_time = 60/max_input_time = -1/' -i /etc/php/${PV}/fpm/php.ini
+RUN sed -e 's/memory_limit = 128M/memory_limit = 1024M/' -i /etc/php/${PV}/fpm/php.ini
+RUN sed -e 's/display_errors = Off/display_errors = On/' -i /etc/php/${PV}/fpm/php.ini
+RUN sed -e 's/post_max_size = 8M/post_max_size = 0/' -i /etc/php/${PV}/fpm/php.ini
+RUN sed -e 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' -i /etc/php/${PV}/fpm/php.ini
+
 # Get composer
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
 RUN mv composer.phar /usr/local/bin/composer
