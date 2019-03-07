@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 ENV PV 7.2 
 
 RUN apt-get update
-RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https
+RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https zip unzip
 
 # Add PHP repository
 RUN wget -q -O- https://packages.sury.org/php/apt.gpg | apt-key add -
