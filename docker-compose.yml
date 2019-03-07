@@ -22,9 +22,13 @@ services:
         environment:
             PHP_IDE_CONFIG: "serverName=docker"
             PHP_XDEBUG_ENABLED: 1
+        links:
+            - mysql
     mysql:
         container_name: ${APP_NAME:?err}_mysql
-        image: mysql:latest
+        image: mysql:5
+        ports:
+            - 13306:3306
         environment:
             MYSQL_ROOT_PASSWORD: dev
             MYSQL_DATABASE: ${APP_NAME:?err}_dev
