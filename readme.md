@@ -7,3 +7,7 @@ docker stack with nginx, php7.2-fpm (based on debian-stretch:slim) and mysql:lat
 2. Adjust nginx.conf if needed
 3. Run 'docker-compose up' and wait
 4. Open http://devbox.localhost/ in your browser (or other URL if you changed nginx.conf)
+
+## Config
+In your IDE set xdebug Port to 9000 and in your browser set IDE Key to "PHPSTORM". Enable listening in your IDE and reload the page. Your IDE should pick up the connection and complain about no defined server.
+Add a server with name "docker", host "localhost" and port "80" with xdebug. Set up path mappings if needed and start debugging.
