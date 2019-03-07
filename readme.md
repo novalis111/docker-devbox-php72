@@ -11,3 +11,8 @@ docker stack with nginx, php7.2-fpm (based on debian-stretch:slim) and mysql:lat
 ## Config
 In your IDE set xdebug Port to 9000 and in your browser set IDE Key to "PHPSTORM". Enable listening in your IDE and reload the page. Your IDE should pick up the connection and complain about no defined server.
 Add a server with name "docker", host "localhost" and port "80" with xdebug. Set up path mappings if needed and start debugging.
+
+For Mac there is an additional step to handle port bindings and IP resolution because docker runs in a VM. See the links below.
+
+## Links
+- https://www.arroyolabs.com/2016/10/docker-xdebug/
