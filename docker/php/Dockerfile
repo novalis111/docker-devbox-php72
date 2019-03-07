@@ -21,20 +21,15 @@ RUN mkdir -p /run/php && chmod 777 /run/php
 RUN useradd -m -p"MRA6Y2NFRF8II" -s /bin/bash dev
 RUN adduser dev sudo
 
-# Configure php
+# Prepare workspace
 RUN set -eux; \
 	[ ! -d /var/www/app ]; \
 	mkdir -p /var/www/app; \
 	chown dev:dev /var/www/app; \
 	chmod 777 /var/www/app
 
-RUN sed -i '1 a xdebug.remote_enable = 1' /etc/php/${PV}/mods-available/xdebug.ini
-RUN sed -i '1 a xdebug.remote_connect_back = 0' /etc/php/${PV}/mods-available/xdebug.ini
-RUN sed -i '1 a xdebug.remote_port = 9000' /etc/php/${PV}/mods-available/xdebug.ini
-RUN sed -i '1 a xdebug.remote_handler = dbgp' /etc/php/${PV}/mods-available/xdebug.ini
-RUN sed -i '1 a xdebug.remote_mode = req' /etc/php/${PV}/mods-available/xdebug.ini
-RUN sed -i '1 a xdebug.remote_autostart = 1' /etc/php/${PV}/mods-available/xdebug.ini
-RUN sed -i '1 a xdebug.idekey = PHPSTORM' /etc/php/${PV}/mods-available/xdebug.ini
+# xdebug config
+COPY xdebug.ini /etc/php/${PV}/mods-available/
 
 # Get composer
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet

@@ -19,6 +19,9 @@ services:
         volumes:
             - ./app:/var/www/app
             - ./share:/tmp/share
+        environment:
+            PHP_IDE_CONFIG: "serverName=docker"
+            PHP_XDEBUG_ENABLED: 1
     mysql:
         container_name: ${APP_NAME:?err}_mysql
         image: mysql:latest
