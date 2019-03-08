@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 ENV PV 7.2 
 
 RUN apt-get update
-RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https zip unzip inetutils-ping
+RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https zip unzip inetutils-ping iproute2
 
 # Add PHP repository
 RUN wget -q -O- https://packages.sury.org/php/apt.gpg | apt-key add -
@@ -17,9 +17,10 @@ RUN apt-get install -y php${PV}-cli php${PV}-fpm php${PV}-common \
 
 RUN mkdir -p /run/php && chmod 777 /run/php
 
-# Add user "dev" with password "dev"
+# Add user "dev" with password "dev" and passwordless sudo
 RUN useradd -m -p"MRA6Y2NFRF8II" -s /bin/bash dev
 RUN adduser dev sudo
+RUN echo 'dev ALL=(ALL) NOPASSWD: ALL' | tee /etc/sudoers
 
 # Prepare workspace
 RUN set -eux; \
@@ -43,6 +44,7 @@ RUN sed -e 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' -i /etc/php
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
 RUN mv composer.phar /usr/local/bin/composer
 
+# entrypoint + php-fpm alias
 COPY docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
 RUN ln -s /usr/sbin/php-fpm${PV} /usr/sbin/php-fpm
@@ -50,6 +52,7 @@ RUN ln -s /usr/sbin/php-fpm${PV} /usr/sbin/php-fpm
 ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /var/www/app
 
+# php-fpm config
 RUN set -ex \
 	&& cd /etc/php/${PV}/fpm/pool.d/ \
 	&& { \
