@@ -24,10 +24,10 @@ RUN echo 'dev ALL=(ALL) NOPASSWD: ALL' | tee /etc/sudoers
 
 # Prepare workspace
 RUN set -eux; \
-	[ ! -d /var/www/app ]; \
-	mkdir -p /var/www/app; \
-	chown dev:dev /var/www/app; \
-	chmod 777 /var/www/app
+	[ ! -d /app ]; \
+	mkdir -p /app; \
+	chown dev:dev /app; \
+	chmod 777 /app
 
 # xdebug config
 COPY xdebug.ini /etc/php/${PV}/mods-available/
@@ -50,7 +50,7 @@ RUN chmod +x /usr/local/bin/docker-php-entrypoint
 RUN ln -s /usr/sbin/php-fpm${PV} /usr/sbin/php-fpm
 
 ENTRYPOINT ["docker-php-entrypoint"]
-WORKDIR /var/www/app
+WORKDIR /app
 
 # php-fpm config
 RUN set -ex \

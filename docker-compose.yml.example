@@ -1,15 +1,25 @@
 version: '3.3'
 
 services:
-    nginx:
-        container_name: ${APP_NAME:?err}_nginx
-        image: nginx:latest
+#    nginx:
+#        container_name: ${APP_NAME:?err}_nginx
+#        image: nginx:latest
+#        ports:
+#            - 80:80
+#            - 443:443
+#        volumes:
+#            - ./app:/var/www/app
+#            - ./nginx.conf:/etc/nginx/conf.d/my.conf
+#        links:
+#            - php
+    apache:
+        container_name: ${APP_NAME:?err}_apache
+        image: httpd:latest-alpine
         ports:
             - 80:80
             - 443:443
         volumes:
-            - ./app:/var/www/app
-            - ./nginx.conf:/etc/nginx/conf.d/my.conf
+            - ./app:/app
         links:
             - php
     php:
@@ -24,19 +34,19 @@ services:
             PHP_XDEBUG_ENABLED: 1
         links:
             - mysql
-    mysql:
-        container_name: ${APP_NAME:?err}_mysql
-        image: mysql:5
-        ports:
-            - 13306:3306
-        environment:
-            MYSQL_ROOT_PASSWORD: dev
-            MYSQL_DATABASE: ${APP_NAME:?err}_dev
-            MYSQL_USER: dev
-            MYSQL_PASSWORD: dev
-        volumes:
-            - mysql:/var/lib/mysql
-            - ./share:/tmp/share
+#    mysql:
+#        container_name: ${APP_NAME:?err}_mysql
+#        image: mysql:5
+#        ports:
+#            - 13306:3306
+#        environment:
+#            MYSQL_ROOT_PASSWORD: dev
+#            MYSQL_DATABASE: ${APP_NAME:?err}_dev
+#            MYSQL_USER: dev
+#            MYSQL_PASSWORD: dev
+#        volumes:
+#            - mysql:/var/lib/mysql
+#            - ./share:/tmp/share
 
-volumes:
-    mysql:
+#volumes:
+#    mysql:
