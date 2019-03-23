@@ -21,6 +21,7 @@ RUN mkdir -p /run/php && chmod 777 /run/php
 RUN useradd -m -p"MRA6Y2NFRF8II" -s /bin/bash dev
 RUN adduser dev sudo
 RUN echo 'dev ALL=(ALL) NOPASSWD: ALL' | tee /etc/sudoers
+COPY .bash_aliases /home/dev/
 
 # Prepare workspace
 RUN set -eux; \
