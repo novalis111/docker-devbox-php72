@@ -19,6 +19,10 @@ For Mac there is an additional step to handle port bindings and IP resolution be
 - You can reference the host via 'docker.host.internal' in php container
 - User/Password for mysql is dev/dev
 - Hostname is 'devbox.localhost' - if you want to change it, do a "grep -ir 'devbox.localhost'" in root to find all places
+- Update host 
+```SQL
+UPDATE s_core_shops SET host = 'devbox.localhost' WHERE id = 1
+```
 - PHP Version can be changed in docker/php/Dockerfile easily
 - Use this script to run php cli scripts with xdebug, or better create an alias:
 ```bash
