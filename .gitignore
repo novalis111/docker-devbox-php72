@@ -148,3 +148,4 @@ modules.xml
  .idea/sonarlint
 
 # End of https://www.gitignore.io/api/git,macos,linux,phpstorm+all
+composer.lock

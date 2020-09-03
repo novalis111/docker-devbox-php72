@@ -7,7 +7,11 @@ RUN sed -e 's/AllowOverride None/AllowOverride All/' -i /usr/local/apache2/conf/
 # RUN echo "ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://php:9000/app/\$1" | tee -a /usr/local/apache2/conf/httpd.conf
 # See https://serverfault.com/questions/450628/apache-2-4-php-fpm-proxypassmatch
 RUN echo $'\
+    <Proxy "fcgi://php:9000">\n\
+        ProxySet timeout=600\n\
+    </Proxy>\n\
     <FilesMatch ".+\.ph(p[3457]?|t|tml)$">\n\
+        SetHandler application/x-httpd-php\n\
         SetHandler "proxy:fcgi://php:9000/"\n\
     </FilesMatch>' | tee -a /usr/local/apache2/conf/httpd.conf
 RUN echo "DirectoryIndex index.html index.php" | tee -a /usr/local/apache2/conf/httpd.conf
