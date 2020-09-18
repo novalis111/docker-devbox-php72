@@ -20,6 +20,7 @@ services:
             - 443:443
         volumes:
             - ./app:/app
+            - ./app2:/app2
         links:
             - php
     php:
@@ -27,13 +28,16 @@ services:
         build: docker/php
         user: "${UID:?err}:${GID:?err}"
         volumes:
-            - ./app:/var/www/app
+            - ./app:/app
+            - ./app2:/app2
             - ./share:/tmp/share
         environment:
             PHP_IDE_CONFIG: "serverName=docker"
             PHP_XDEBUG_ENABLED: 1
-        links:
-            - mysql
+#        # Use this block to have mysql docker, but i prefer to run it on host
+#        # and address it with docker.host.internal:3600
+#        links:
+#            - mysql
 #    mysql:
 #        container_name: ${APP_NAME:?err}_mysql
 #        image: mysql:5

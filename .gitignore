@@ -1,6 +1,7 @@
 /.env
 /docker-compose.yml
 /app
+/app2
 /composer.lock
 /composer.phar
 
