@@ -7,13 +7,13 @@ RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https zip unzip in
 # Add PHP repository
 RUN wget -q -O- https://packages.sury.org/php/apt.gpg | apt-key add -
 RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
-RUN apt-get update
+RUN apt-get autoremove && apt-get update
 
 # Install php
 RUN apt-get install -y php${PV}-cli php${PV}-fpm php${PV}-common php${PV}-intl \
     php${PV}-curl php${PV}-fpm php${PV}-gd php${PV}-json php${PV}-mbstring \
     php${PV}-mysql php${PV}-opcache php${PV}-readline php${PV}-soap php${PV}-xml php${PV}-zip \
-    php-apcu php-redis php-xdebug
+    php-apcu php-redis php-xdebug 
 
 RUN mkdir -p /run/php && chmod 777 /run/php
 
