@@ -10,7 +10,7 @@ RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/source
 RUN apt-get update
 
 # Install php
-RUN apt-get install -y php${PV}-cli php${PV}-fpm php${PV}-common \
+RUN apt-get install -y php${PV}-cli php${PV}-fpm php${PV}-common php${PV}-intl \
     php${PV}-curl php${PV}-fpm php${PV}-gd php${PV}-json php${PV}-mbstring \
     php${PV}-mysql php${PV}-opcache php${PV}-readline php${PV}-soap php${PV}-xml php${PV}-zip \
     php-apcu php-redis php-xdebug
