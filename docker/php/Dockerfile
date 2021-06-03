@@ -1,13 +1,17 @@
 FROM debian:stretch-slim
-ENV PV 7.2 
+ENV PV 7.4 
 
 RUN apt-get update
-RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https zip unzip inetutils-ping iproute2
+RUN apt-get install -y vim git wget sudo gnupg2 apt-transport-https zip unzip inetutils-ping iproute2 mysql-client curl
+
+# NodeJS
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y build-essential nodejs
 
 # Add PHP repository
 RUN wget -q -O- https://packages.sury.org/php/apt.gpg | apt-key add -
 RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
-RUN apt-get autoremove && apt-get update
+RUN apt-get autoremove -y && apt-get update
 
 # Install php
 RUN apt-get install -y php${PV}-cli php${PV}-fpm php${PV}-common php${PV}-intl \
@@ -40,6 +44,7 @@ RUN sed -e 's/memory_limit = 128M/memory_limit = 1024M/' -i /etc/php/${PV}/fpm/p
 RUN sed -e 's/display_errors = Off/display_errors = On/' -i /etc/php/${PV}/fpm/php.ini
 RUN sed -e 's/post_max_size = 8M/post_max_size = 0/' -i /etc/php/${PV}/fpm/php.ini
 RUN sed -e 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' -i /etc/php/${PV}/fpm/php.ini
+RUN sed -e 's/error_reporting = E_ALL & ~E_NOTICE/error_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE/' -i /etc/php/${PV}/fpm/php.ini
 
 # Get composer
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
